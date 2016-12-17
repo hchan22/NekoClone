@@ -15,7 +15,7 @@ public class Chinchilla {
     private Long mLastPet;
 
     public Chinchilla() {
-        this.name = "Unknown";
+        this.name = "Helen";
         timeCreated = Calendar.getInstance().getTimeInMillis();
         image_url = "pendejo";
         petCount = 0;
@@ -42,6 +42,27 @@ public class Chinchilla {
     public String getName() {
         return name;
     }
+
+    public void setTimeCreated(Long timeCreated) {
+        this.timeCreated = timeCreated;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
+    }
+
+    public void setPetCount(int petCount) {
+        this.petCount = petCount;
+    }
+
+    public void setmLastPet(Long mLastPet) {
+        this.mLastPet = mLastPet;
+    }
+
     //certain number of pets, something happens, x times
     //you get a new chinchilla, name is chinchilla{name}[son or daughter random]
     //check if chinchilla{name} ends in child, if true, when pet certain number of times

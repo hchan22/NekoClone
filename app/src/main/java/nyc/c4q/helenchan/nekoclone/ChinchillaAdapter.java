@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -21,8 +22,8 @@ import nyc.c4q.helenchan.nekoclone.model.Chinchilla;
 
 public class ChinchillaAdapter extends RecyclerView.Adapter<ChinchillaAdapter.ChinChillViewHolder> {
 
-    @Inject
-    List<Chinchilla> chinchillas;
+
+    List<Chinchilla> mChinchillaList = new ArrayList<>();
 
 
     @Override
@@ -35,18 +36,19 @@ public class ChinchillaAdapter extends RecyclerView.Adapter<ChinchillaAdapter.Ch
 
     @Override
     public void onBindViewHolder(ChinChillViewHolder holder, int position) {
-        Chinchilla chin = chinchillas.get(position);
+        Chinchilla chin = mChinchillaList.get(position);
         holder.bind(chin);
 
     }
 
     @Override
     public int getItemCount() {
-        return chinchillas.size();
+        return mChinchillaList.size();
     }
 
-    public void setData(List<Chinchilla> chinchillas) {
-        this.chinchillas = chinchillas;
+    public void setData(List<Chinchilla> chinchillaList) {
+        mChinchillaList.clear();
+        mChinchillaList.addAll(chinchillaList);
         notifyDataSetChanged();
     }
 
