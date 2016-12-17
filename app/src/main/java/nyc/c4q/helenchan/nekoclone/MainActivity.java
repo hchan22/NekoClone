@@ -21,19 +21,17 @@ import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 public class MainActivity extends AppCompatActivity {
 
 
-    private TextView mHelloWorldTV;
 
     @Inject
     DatabaseHelper dbHelper;
     SQLiteDatabase db;
     RecyclerView recyclerView;
-    ChinchillaAdapter adapter;
+    ChinchillaAdapter adapter = new ChinchillaAdapter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mHelloWorldTV = (TextView) findViewById(R.id.hello_world);
         ((MyApplication) getApplication()).getComponent().inject(this);
         db = dbHelper.getWritableDatabase();
         launchTest();
@@ -42,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = (RecyclerView)findViewById(R.id.main_recyclerview);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
-        recyclerView.setAdapter(new ChinchillaAdapter());
+        recyclerView.setAdapter(adapter);
     }
 
     public void addChinchilla(Chinchilla chinchilla) {
