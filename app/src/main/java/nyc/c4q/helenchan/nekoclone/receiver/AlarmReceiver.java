@@ -1,4 +1,4 @@
-package nyc.c4q.helenchan.nekoclone;
+package nyc.c4q.helenchan.nekoclone.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

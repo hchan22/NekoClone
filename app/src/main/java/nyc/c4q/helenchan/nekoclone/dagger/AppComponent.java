@@ -10,7 +10,7 @@ import nyc.c4q.helenchan.nekoclone.MainActivity;
  */
 
 @Singleton
-@Component(modules = DatabaseModule.class)
+@Component(modules = {DatabaseModule.class, NetworkModule.class})
 public interface AppComponent {
 
     void inject(MainActivity activity);
