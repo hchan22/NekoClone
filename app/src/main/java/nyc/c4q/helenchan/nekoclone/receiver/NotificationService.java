@@ -1,4 +1,4 @@
-package nyc.c4q.helenchan.nekoclone;
+package nyc.c4q.helenchan.nekoclone.receiver;
 
 import android.app.IntentService;
 import android.app.Notification;
@@ -7,6 +7,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+
+import nyc.c4q.helenchan.nekoclone.MainActivity;
+import nyc.c4q.helenchan.nekoclone.R;
 
 /**
  * Created by helenchan on 12/15/16.

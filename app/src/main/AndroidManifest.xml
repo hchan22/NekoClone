@@ -21,15 +21,15 @@
             </intent-filter>
         </activity>
         <service
-            android:name=".NotificationService"
+            android:name=".receiver.NotificationService"
             android:exported="false"/>
-        <receiver android:name=".WallpaperReceiver">
+        <receiver android:name=".receiver.WallpaperReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.WALLPAPER_CHANGED" />
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".AlarmReceiver"
+            android:name=".receiver.AlarmReceiver"
             android:process=":remote" >
         </receiver>
     </application>
