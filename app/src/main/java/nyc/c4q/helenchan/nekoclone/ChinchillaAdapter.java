@@ -5,14 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
 
 import nyc.c4q.helenchan.nekoclone.model.Chinchilla;
 
@@ -22,8 +21,14 @@ import nyc.c4q.helenchan.nekoclone.model.Chinchilla;
 
 public class ChinchillaAdapter extends RecyclerView.Adapter<ChinchillaAdapter.ChinChillViewHolder> {
 
-
+    private Listener listener;
     List<Chinchilla> mChinchillaList = new ArrayList<>();
+
+    public ChinchillaAdapter(List<Chinchilla> chinchillas, Listener listener) {
+        mChinchillaList = chinchillas;
+    }
+
+
 
 
     @Override
@@ -53,10 +58,9 @@ public class ChinchillaAdapter extends RecyclerView.Adapter<ChinchillaAdapter.Ch
     }
 
 
-
     public class ChinChillViewHolder extends RecyclerView.ViewHolder {
 
-        @Inject
+        LinearLayout layout;
         TextView chin_name;
         ImageView chin_image;
 
@@ -64,13 +68,35 @@ public class ChinchillaAdapter extends RecyclerView.Adapter<ChinchillaAdapter.Ch
             super(itemView);
             chin_name = (TextView) itemView.findViewById(R.id.name_textview);
             chin_image = (ImageView) itemView.findViewById(R.id.chin_imageview);
+            layout = (LinearLayout) itemView.findViewById(R.id.layout_id);
         }
 
         public void bind(Chinchilla chin) {
-        chin_name.setText(chin.getName());
-            Picasso.with(itemView.getContext())
-                    .load(chin.getImage_url())
+            final Chinchilla chinchilla = chin;
+            chin_name.setText(chinchilla.getName());
+            Glide.with(itemView.getContext())
+                    .load(chinchilla.getImage_url())
                     .into(chin_image);
+            layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onChinchillaClicked(chinchilla);
+                }
+            });
+
+            layout.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    listener.onChinchillaLongClicked(chinchilla);
+                    return true;
+                }
+            });
         }
+    }
+
+    interface Listener {
+        void onChinchillaClicked(Chinchilla chinClick);
+
+        void onChinchillaLongClicked(Chinchilla chinLongClick);
     }
 }

@@ -23,6 +23,11 @@ public class Chinchilla {
 
     }
 
+    public Chinchilla(String name, String image_url){
+        this.name = name;
+        this.image_url = image_url;
+    }
+
     public Chinchilla(String nombre){
         name = nombre;
     }

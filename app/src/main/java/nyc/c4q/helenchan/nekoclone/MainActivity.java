@@ -10,8 +10,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
+import nl.qbusict.cupboard.QueryResultIterable;
 import nyc.c4q.helenchan.nekoclone.model.Chinchilla;
 import nyc.c4q.helenchan.nekoclone.model.DatabaseHelper;
 import nyc.c4q.helenchan.nekoclone.model.networkmodels.GiphyResult;
@@ -26,7 +30,7 @@ import retrofit2.Response;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ChinchillaAdapter.Listener {
 
     @Inject
     GiphyAPI mGiphyAPI;
@@ -36,7 +40,11 @@ public class MainActivity extends AppCompatActivity {
     DatabaseHelper dbHelper;
     SQLiteDatabase db;
     RecyclerView recyclerView;
-    ChinchillaAdapter adapter = new ChinchillaAdapter();
+    ChinchillaAdapter adapter = new ChinchillaAdapter(selectList(), this);
+    Chinchilla chinchilla = new Chinchilla();
+    String image;
+    String name;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +54,11 @@ public class MainActivity extends AppCompatActivity {
         db = dbHelper.getWritableDatabase();
         launchTest();
         alarmNotif();
-        Chinchilla chinchilla = new Chinchilla();
         setImage(chinchilla);
         setName(chinchilla);
         addChinchilla(chinchilla);
 
-        recyclerView = (RecyclerView)findViewById(R.id.main_recyclerview);
+        recyclerView = (RecyclerView) findViewById(R.id.main_recyclerview);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         recyclerView.setAdapter(adapter);
     }
@@ -94,6 +101,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private List<Chinchilla> selectList() {
+        List<Chinchilla> chinchillas = new ArrayList<>();
+
+        try {
+            QueryResultIterable<Chinchilla> iterating = cupboard().withDatabase(db).query(Chinchilla.class).query();
+            for (Chinchilla chin : iterating) {
+                chinchillas.add(chin);
+            }
+            iterating.close();
+        } catch (Exception e) {
+
+        }
+
+        return chinchillas;
+    }
+
+    private void refreshList() {
+        adapter.setData(selectList());
+    }
 
     public void launchTest() {
         Intent i = new Intent(this, NotificationService.class);
@@ -102,12 +128,29 @@ public class MainActivity extends AppCompatActivity {
 
     public void alarmNotif() {
         Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
+        setName(chinchilla);
+        setImage(chinchilla);
         final PendingIntent pendingIntent = PendingIntent
                 .getBroadcast(this, AlarmReceiver.REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         long firstMillis = System.currentTimeMillis();
         AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-        alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, firstMillis, AlarmManager.INTERVAL_FIFTEEN_MINUTES/15, pendingIntent);
+        alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, firstMillis, AlarmManager.INTERVAL_FIFTEEN_MINUTES / 15, pendingIntent);
+
     }
-    
+
+    @Override
+    public void onChinchillaClicked(Chinchilla chinClick) {
+        ChangeNameDialogFragment change = new ChangeNameDialogFragment();
+        change.show(getFragmentManager(), "name");
+        refreshList();
+    }
+
+    @Override
+    public void onChinchillaLongClicked(Chinchilla chinLongClick) {
+        cupboard().withDatabase(db).delete(chinchilla);
+        refreshList();
+    }
+
+
 }
