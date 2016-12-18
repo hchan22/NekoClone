@@ -68,6 +68,10 @@ public class Chinchilla {
         this.mLastPet = mLastPet;
     }
 
+    public Long get_id() {
+        return _id;
+    }
+
     //certain number of pets, something happens, x times
     //you get a new chinchilla, name is chinchilla{name}[son or daughter random]
     //check if chinchilla{name} ends in child, if true, when pet certain number of times

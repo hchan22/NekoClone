@@ -23,7 +23,6 @@ import nyc.c4q.helenchan.nekoclone.model.networkmodels.RandomUserResult;
 import nyc.c4q.helenchan.nekoclone.network.GiphyAPI;
 import nyc.c4q.helenchan.nekoclone.network.RandomUserAPI;
 import nyc.c4q.helenchan.nekoclone.receiver.AlarmReceiver;
-import nyc.c4q.helenchan.nekoclone.receiver.NotificationService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,10 +39,8 @@ public class MainActivity extends AppCompatActivity implements ChinchillaAdapter
     DatabaseHelper dbHelper;
     SQLiteDatabase db;
     RecyclerView recyclerView;
-    ChinchillaAdapter adapter = new ChinchillaAdapter(selectList(), this);
+    ChinchillaAdapter adapter;
     Chinchilla chinchilla = new Chinchilla();
-    String image;
-    String name;
 
 
     @Override
@@ -52,14 +49,10 @@ public class MainActivity extends AppCompatActivity implements ChinchillaAdapter
         setContentView(R.layout.activity_main);
         ((MyApplication) getApplication()).getComponent().inject(this);
         db = dbHelper.getWritableDatabase();
-        launchTest();
         alarmNotif();
-        setImage(chinchilla);
-        setName(chinchilla);
-        addChinchilla(chinchilla);
-
         recyclerView = (RecyclerView) findViewById(R.id.main_recyclerview);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 3));
+        adapter = new ChinchillaAdapter(selectList(), this);
         recyclerView.setAdapter(adapter);
     }
 
@@ -121,15 +114,10 @@ public class MainActivity extends AppCompatActivity implements ChinchillaAdapter
         adapter.setData(selectList());
     }
 
-    public void launchTest() {
-        Intent i = new Intent(this, NotificationService.class);
-        startService(i);
-    }
+
 
     public void alarmNotif() {
         Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
-        setName(chinchilla);
-        setImage(chinchilla);
         final PendingIntent pendingIntent = PendingIntent
                 .getBroadcast(this, AlarmReceiver.REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -141,7 +129,11 @@ public class MainActivity extends AppCompatActivity implements ChinchillaAdapter
 
     @Override
     public void onChinchillaClicked(Chinchilla chinClick) {
+        long chinchillaID = chinClick.get_id();
         ChangeNameDialogFragment change = new ChangeNameDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putLong(ChangeNameDialogFragment.CHINCHILLA_ID_KEY,chinchillaID);
+        change.setArguments(bundle);
         change.show(getFragmentManager(), "name");
         refreshList();
     }

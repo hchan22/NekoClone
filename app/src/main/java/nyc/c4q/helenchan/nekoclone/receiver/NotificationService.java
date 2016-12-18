@@ -22,13 +22,13 @@ public class NotificationService extends IntentService {
         super(SERVICE_NAME);
     }
 
+
     @Override
     protected void onHandleIntent(Intent intent) {
         int NOTIFICATION_ID = 1;
         int requestID = (int) System.currentTimeMillis();
 
         Intent intents = new Intent(this, MainActivity.class);
-
         int flags = PendingIntent.FLAG_CANCEL_CURRENT; // Cancel old intent and create new one
 
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), requestID, intents, flags);
@@ -43,4 +43,6 @@ public class NotificationService extends IntentService {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(NOTIFICATION_ID, notification);
     }
+
+
 }
