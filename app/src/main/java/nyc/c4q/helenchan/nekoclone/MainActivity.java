@@ -23,6 +23,7 @@ import nyc.c4q.helenchan.nekoclone.model.networkmodels.RandomUserResult;
 import nyc.c4q.helenchan.nekoclone.network.GiphyAPI;
 import nyc.c4q.helenchan.nekoclone.network.RandomUserAPI;
 import nyc.c4q.helenchan.nekoclone.receiver.AlarmReceiver;
+import nyc.c4q.helenchan.nekoclone.receiver.NotificationService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements ChinchillaAdapter
         setContentView(R.layout.activity_main);
         ((MyApplication) getApplication()).getComponent().inject(this);
         db = dbHelper.getWritableDatabase();
+        launchTestService();
         alarmNotif();
         recyclerView = (RecyclerView) findViewById(R.id.main_recyclerview);
         recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 3));
@@ -114,6 +116,11 @@ public class MainActivity extends AppCompatActivity implements ChinchillaAdapter
         adapter.setData(selectList());
     }
 
+    public void launchTestService() {
+        Intent i = new Intent(this, NotificationService.class);
+        startService(i);
+    }
+
 
 
     public void alarmNotif() {
@@ -140,7 +147,8 @@ public class MainActivity extends AppCompatActivity implements ChinchillaAdapter
 
     @Override
     public void onChinchillaLongClicked(Chinchilla chinLongClick) {
-        cupboard().withDatabase(db).delete(chinchilla);
+        long chinchillaID = chinLongClick.get_id();
+        cupboard().withDatabase(db).delete(Chinchilla.class, chinchillaID);
         refreshList();
     }
 

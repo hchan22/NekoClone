@@ -31,8 +31,6 @@ public class ChangeNameDialogFragment extends DialogFragment {
     private SQLiteDatabase db;
 
 
-
-
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         ((MyApplication) getActivity().getApplication()).getComponent().inject(this);
